@@ -1,13 +1,11 @@
 <script setup>
 import { reactive } from 'vue';
-import { useRouter } from 'vue-router';
 import Link from '@/components/Link.vue'
 import useImage from '@/composables/useImage';
 import { useProductStore } from '@/stores/productStore'
 
 const { onFileChange, url, isImageUploaded } = useImage()
 const productStore = useProductStore()
-const router = useRouter()
 
 const formData = reactive({
     name: '',
@@ -17,18 +15,8 @@ const formData = reactive({
     image: ''
 })
 
-const submitHandler = async data => {
-    const { image, ...values } = data;
-
-    try {
-        await productStore.createProduct({
-            ...values,
-            image: url.value
-        })
-        router.push({name: 'products'})
-    } catch (error) {
-        console.log(error);
-    }
+const submitHandler = data => {
+    console.log(data);
 }
 </script>
 
@@ -55,12 +43,12 @@ const submitHandler = async data => {
                     </div>
                     <FormKit type="select" label="Categoría" name="category" validation="required"
                         :validation-messages="{ required: 'La categoría del producto es obligatoria' }"
-                        :options="productStore.categoryOptions" v-model.trim="formData.category" />
+                        :options="[1, 2, 3]" v-model.number="formData.category" />
                     <FormKit type="number" label="Precio" name="price" validation="required"
-                        placeholder="Precio del producto" v-model.trim="formData.price"
+                        placeholder="Precio del producto" v-model.number="formData.price"
                         :validation-messages="{ required: 'El precio del producto es obligatorio' }" min="0" />
                     <FormKit type="number" label="Disponibles" name="availability" validation="required"
-                        placeholder="Cantidad disponible" v-model.trim="formData.availability"
+                        placeholder="Cantidad disponible" v-model.number="formData.availability"
                         :validation-messages="{ required: 'La cantidad es obligatoria' }" min="0" />
                 </FormKit>
             </div>
